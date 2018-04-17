@@ -28,15 +28,6 @@ $(document).ready(function () {
         var $form = $("#form");
         var formClass = $("#form").value();
         alert(formClass);
-        var json;
-        $("#form > step").each(
-            function () {
-                alert('child');
-                alert(this.value());
-
-            }
-        );
-
         var json = getFormData($form);
         $.ajax({
             cache: false,
