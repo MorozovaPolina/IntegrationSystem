@@ -2,6 +2,7 @@ package stub.rest;
 
 
 import com.sun.org.apache.xpath.internal.operations.String;
+import org.apache.tools.ant.taskdefs.Sleep;
 import stub.exceptions.IncorrectRequirement;
 import stub.exceptions.IncorrectRequirementsystemMaping;
 import stub.exceptions.NoSuchSystem;
@@ -15,6 +16,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 import java.io.IOException;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 import static stub.systems.ExistingSystem.getSystem;
@@ -23,28 +25,44 @@ import static stub.systems.ExistingSystem.getSystem;
 @Path("onClickHandler")
 @Produces({MediaType.APPLICATION_JSON})
 @Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_FORM_URLENCODED, MediaType.WILDCARD})
-public class onClickHandler{
+public class onClickHandler {
 
     @GET
     public void handleGet(){
         System.out.println("Hello!");
     }
+
     @POST
     public void handle(java.lang.String request) throws IOException, NoSuchSystem, InterruptedException, ExecutionException, IncorrectRequirementsystemMaping {
         System.out.println("Click!");
+        Thread.sleep(100000);
+        System.out.println("Sleepy");
+        if(request!=null) System.out.println(request);
         java.lang.String[] helparray = request.split(System.lineSeparator());
-        java.lang.String source = helparray[0].split("=")[1];
-        java.lang.String target = helparray[1].split("=")[1];
-        java.lang.String count = helparray[2].split("=")[1];
-        java.lang.String path= helparray[3].split("=")[1];
-       // System.out.println(path);
-       // path=path.replace("%2F", "/");
-       // path=path.replace("%3A", ":");
-      //  System.out.println(path);
-        ExistingSystem Source = getSystem(source);
-        ExistingSystem Target = getSystem(target);
+        if (helparray.length<4||(helparray.length-1)%3!=0)return;
+        java.lang.String path;
+        try {
+            path= helparray[helparray.length-1].split("=")[1];
+        }
+        catch (ArrayIndexOutOfBoundsException e){
+            return;
+        }
+        if(path==null || path.equals("") || path.length()==0)return;
         Transaction transaction = new Transaction(RequirementsTypes.Routing, path);
-        transaction.addStep(new Step(Source, Target, Integer.parseInt(count)));
+        for(int i=0; i<Math.floorDiv(helparray.length, 3); i++) {
+            java.lang.String source = helparray[3*i].split("=")[1];
+            java.lang.String target = helparray[3*i+1].split("=")[1];
+            java.lang.String count = helparray[3*i+2].split("=")[1];
+            if(source.equals("Source")|| target.equals("Target"))return;
+            // System.out.println(path);
+            // path=path.replace("%2F", "/");
+            // path=path.replace("%3A", ":");
+            //  System.out.println(path);
+            ExistingSystem Source = getSystem(source);
+            ExistingSystem Target = getSystem(target);
+
+            transaction.addStep(new Step(Source, Target, Integer.parseInt(count)));
+        }
         transaction.startTransaction();
        // System.out.println(request.getParameterNames());
         //System.out.println(request.getSource()+" "+ request.getTarget()+" "+ request.getCount());
