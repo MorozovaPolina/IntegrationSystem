@@ -1,6 +1,6 @@
 var Num =1;
 $(document).ready(function() {
-    $(".addBT").click(function () {
+    $(".addBT").click(function() {
         Num++;
         var newSection = $(this).parent().clone(true, true).attr("id", "step" + Num);
         newSection.insertAfter($(this).parent());
@@ -19,46 +19,50 @@ $(document).ready(function() {
                 $(this).parent().prev($(this).parent()).find(".addBT").fadeIn(30);
             }
             $(this).parent().remove();
-        }
+        };
     });
 });
 
-$(document).ready(function () {
-    $("#form").submit(function () {
-        var $form = $("#form");
-        var formClass = $("#form").value();
-        alert('CLASS');
-        var json;
-        $("#form").each(function () {
-            alert('child');
-            alert(this.value());
+$(document).ready(function() {
+    $("#form").submit(function() {
+        alert('hi!');
+        var jsonObj = [];
+        $("#form").children('.step').each(function () {
+        var source = $(this).find(".source").val();
+        var target = $(this).find(".target").val();
+        var count = $(this).find(".count").val();
+        var item = {};
+        alert('item');
+        item ["source"] = source;
+        item ["target"] = target;
+        item ["count"] = count;
+        jsonObj.push(item);
         });
-
-        var json = getFormData($form);
+        var api = $(this).find(".api").val();
+        var json = {
+            "api": api,
+            "scenario": jsonObj
+        };
         $.ajax({
             cache: false,
             type: "POST",
+            contentType :"application/json",
             url: '/api/RoutingHandler',
             data: JSON.stringify(json),
             dataType: 'json',
-            success: function (data) {
-                alert('success');
-            },
-            failure: function (errMsg) {
-                alert('failure');
-
+            success : function(result) {
+                alert('wow');
             }
-        })
-    })
-})
+        });
+    });
+});
 
 function getFormData($form){
-
     var unindexedArray = $form.serializeArray();
-
     var indexedArray = {};
     $.map(unindexedArray, function (n, i){
         indexedArray[n['name']] = n['value'];
 
     });
-    return indexedArray;}
+    return indexedArray;
+}
