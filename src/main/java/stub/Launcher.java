@@ -2,15 +2,9 @@ package stub;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
-import stub.helpers.RequirementsTypes;
-import stub.systems.ExistingSystem;
-import stub.rest.SystemA;
 
 
 import java.util.Locale;
-
-import static stub.Initialization.initialization;
-import static stub.sendMessage.MessageSender.sendMessage;
 
 
 public class Launcher {
@@ -26,7 +20,5 @@ public class Launcher {
 
         server.setHandler(context);
         server.start();
-        initialization();
-
     }
 }

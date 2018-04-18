@@ -27,12 +27,18 @@ $(document).ready(function () {
     $("#form").submit(function () {
         var $form = $("#form");
         var formClass = $("#form").value();
-        alert(formClass);
+        alert('CLASS');
+        var json;
+        $("#form").each(function () {
+            alert('child');
+            alert(this.value());
+        });
+
         var json = getFormData($form);
         $.ajax({
             cache: false,
             type: "POST",
-            url: '/api/onClickHandler',
+            url: '/api/RoutingHandler',
             data: JSON.stringify(json),
             dataType: 'json',
             success: function (data) {

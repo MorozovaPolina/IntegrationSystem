@@ -1,14 +1,7 @@
 package stub.rest;
 
 
-import com.sun.org.apache.xpath.internal.operations.String;
-import org.apache.tools.ant.taskdefs.Sleep;
-import stub.exceptions.IncorrectRequirement;
-import stub.exceptions.IncorrectRequirementsystemMaping;
-import stub.exceptions.NoSuchSystem;
 import stub.helpers.RequirementsTypes;
-import stub.messages.UserRequest;
-import stub.systems.ExistingSystem;
 import stub.transaction.Step;
 import stub.transaction.Transaction;
 
@@ -16,13 +9,11 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 import java.io.IOException;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-import static stub.systems.ExistingSystem.getSystem;
 
 
-@Path("onClickHandler")
+@Path("RoutingHandler")
 @Produces({MediaType.APPLICATION_JSON})
 @Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_FORM_URLENCODED, MediaType.WILDCARD})
 public class onClickHandler {
@@ -33,9 +24,8 @@ public class onClickHandler {
     }
 
     @POST
-    public void handle(java.lang.String request) throws IOException, NoSuchSystem, InterruptedException, ExecutionException, IncorrectRequirementsystemMaping {
+    public void handlePost(java.lang.String request) throws IOException, InterruptedException, ExecutionException{
         System.out.println("Click!");
-        Thread.sleep(100000);
         System.out.println("Sleepy");
         if(request!=null) System.out.println(request);
         java.lang.String[] helparray = request.split(System.lineSeparator());
@@ -58,53 +48,16 @@ public class onClickHandler {
             // path=path.replace("%2F", "/");
             // path=path.replace("%3A", ":");
             //  System.out.println(path);
-            ExistingSystem Source = getSystem(source);
-            ExistingSystem Target = getSystem(target);
 
-            transaction.addStep(new Step(Source, Target, Integer.parseInt(count)));
+            transaction.addStep(new Step(source, target, Integer.parseInt(count)));
+            System.out.println("Start");
         }
         transaction.startTransaction();
        // System.out.println(request.getParameterNames());
         //System.out.println(request.getSource()+" "+ request.getTarget()+" "+ request.getCount());
 
-        /*ExistingSystem SystemA = null;
-        try {
-            SystemA = getSystem(request.getSource());
-        } catch (NoSuchSystem noSuchSystem) {
-            noSuchSystem.printStackTrace();
-        }
-        ExistingSystem SystemB = null;
-        try {
-            SystemB = getSystem("SystemB");
-        } catch (NoSuchSystem noSuchSystem) {
-            noSuchSystem.printStackTrace();
-        }
-        ExistingSystem SystemC = null;
-        try {
-            SystemC = getSystem("SystemC");
-        } catch (NoSuchSystem noSuchSystem) {
-            noSuchSystem.printStackTrace();
-        }
-        ExistingSystem SystemD = null;
-        try {
-            SystemD = getSystem("SystemD");
-        } catch (NoSuchSystem noSuchSystem) {
-            noSuchSystem.printStackTrace();
-        }*/
-    /*    ExistingSystem Source = null;
-        try {
-            Source = getSystem(request.getSource());
-        } catch (NoSuchSystem noSuchSystem) {
-            noSuchSystem.printStackTrace();
-        }
-        ExistingSystem Target = null;
-        try {
-            Target = getSystem(request.getTarget());
-        } catch (NoSuchSystem noSuchSystem) {
-            noSuchSystem.printStackTrace();
-        }
-        Transaction transaction = new Transaction(RequirementsTypes.Routing, "http://localhost:8888/api/systemB");
-        transaction.addStep(Source, Target, request.getCount());
+    //    Transaction transaction = new Transaction(RequirementsTypes.Routing, "http://localhost:8888/api/systemB");
+      //  transaction.addStep(Source, Target, request.getCount());
       /*  transaction.addStep(SystemA, SystemB, 2);
         transaction.addStep(SystemD, SystemB, 2);
         transaction.addStep(SystemC, SystemB, 2);
@@ -124,13 +77,8 @@ public class onClickHandler {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
-        } catch (IncorrectRequirementsystemMaping incorrectRequirementsystemMaping) {
-            incorrectRequirementsystemMaping.printStackTrace();
-            System.out.println("Проблемы с согласованием требований и возможностей системы");
-        } catch (NoSuchSystem noSuchSystem) {
-            noSuchSystem.printStackTrace();
-            System.out.println("Нет такой системы");
-        }*/
+        }
+        */
         //return new Response("OK");
 
     }

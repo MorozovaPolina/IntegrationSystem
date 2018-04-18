@@ -1,16 +1,13 @@
 package stub.transaction;
 
 import stub.exceptions.AlreadyGotTheMes;
-import stub.exceptions.IncorrectRequirementsystemMaping;
 import stub.exceptions.MesONisOutOfBounds;
-import stub.exceptions.NoSuchSystem;
 import stub.helpers.RequirementsTypes;
 import stub.messages.DemoInObject;
 import stub.rest.SystemA;
 import stub.rest.SystemB;
 import stub.rest.SystemC;
 import stub.rest.SystemD;
-import stub.systems.ExistingSystem;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -51,7 +48,7 @@ public class Transaction {
         expected_message_number+=Step.NumberOfMessagesToSend;
         inMessages = new DemoInObject[expected_message_number];
     }
-    public void addStep(ExistingSystem Source, ExistingSystem Target, int NumberOfMessagesToSend){
+    public void addStep(String Source, String Target, int NumberOfMessagesToSend){
         Scenario.add( new Step(Source, Target, NumberOfMessagesToSend));
         expected_message_number+=NumberOfMessagesToSend;
         NumberOfSteps++;
@@ -68,19 +65,20 @@ public class Transaction {
        }
     }
 
-    public void startTransaction() throws InterruptedException, ExecutionException, NoSuchSystem, IncorrectRequirementsystemMaping {
+    public void startTransaction() throws InterruptedException, ExecutionException{
         Transactions.put(transaction_id, this);
         Status = TransactionStatus.Opened;
+        System.out.println("startTransaction");
         int j=0; //итератор для подсчета номера сообщения в транзакции, а не в рамках одного шага.
         for(Step step: Scenario) {
             if(Status==TransactionStatus.Failed) break;
-            if ("SystemA".equals(step.Target.getSystemName())) {
+            if ("SystemA".equals(step.Target)) {
                 j =SystemA.sendMessage(transaction_id, step.NumberOfMessagesToSend, step.Source, step.Target, API, Requirement, j);
-            } else if ("SystemB".equals(step.Target.getSystemName())) {
+            } else if ("SystemB".equals(step.Target)) {
                 j= SystemB.sendMessage(transaction_id, step.NumberOfMessagesToSend, step.Source, step.Target, API, Requirement, j);
-            } else if ("SystemC".equals(step.Target.getSystemName())) {
+            } else if ("SystemC".equals(step.Target)) {
                 j = SystemC.sendMessage(transaction_id, step.NumberOfMessagesToSend, step.Source, step.Target, API, Requirement, j);
-            } else if ("SystemD".equals(step.Target.getSystemName())) {
+            } else if ("SystemD".equals(step.Target)) {
                 j = SystemD.sendMessage(transaction_id, step.NumberOfMessagesToSend, step.Source, step.Target, API, Requirement, j);
             }
         }

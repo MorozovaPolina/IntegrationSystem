@@ -1,14 +1,12 @@
 package stub.transaction;
 
-import stub.systems.ExistingSystem;
-
 
 public class Step {
-    public ExistingSystem Source;
-    public ExistingSystem Target;
+    public String Source;
+    public String Target;
     public int NumberOfMessagesToSend;
 
-    public Step(ExistingSystem Source, ExistingSystem Target, int NumberOfMessageToSend){
+    public Step(String Source, String Target, int NumberOfMessageToSend){
         this.Source=Source;
         this.Target=Target;
         this.NumberOfMessagesToSend=NumberOfMessageToSend;
