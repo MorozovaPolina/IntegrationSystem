@@ -7,7 +7,7 @@ import stub.sendMessage.MessageSender;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
-import static stub.sendMessage.MessageHandler.processMessage;
+import static stub.sendMessage.MessageHandler.ordinaryProcessMessage;
 
 @Path("systemA")
 @Produces(MediaType.APPLICATION_JSON)
@@ -18,8 +18,8 @@ public class SystemA extends MessageSender {
     @POST
     public Response handle(DemoInObject in) {
         System.out.println("Hey! System A here");
-        String res=processMessage(in, "SystemA");
-        System.out.println(res);
+        String res=ordinaryProcessMessage(in, "SystemA");
+        if(!res.equals("Successfully"))return new Response(res);
         return new Response(res);
     }
     /*@POST

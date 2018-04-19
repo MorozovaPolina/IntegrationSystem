@@ -10,7 +10,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import static stub.sendMessage.MessageHandler.processMessage;
+import static stub.sendMessage.MessageHandler.ordinaryProcessMessage;
 
 @Path("systemC")
 @Produces(MediaType.APPLICATION_JSON)
@@ -21,6 +21,6 @@ public class SystemC extends MessageSender  {
     @POST
     public Response handle(DemoInObject in) {
         System.out.println("Hey! System C here");
-        return new Response(processMessage(in, "SystemC"));
+        return new Response(ordinaryProcessMessage(in, "SystemC"));
     }
 }

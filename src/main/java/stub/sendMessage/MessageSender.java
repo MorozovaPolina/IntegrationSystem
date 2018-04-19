@@ -16,12 +16,11 @@ public class MessageSender {
         Client client = new Client();
         AsyncWebResource webRes = client.asyncResource(API);
         int LSTNumber=FRSTNumber;
-        System.out.println("messageSender");
-        for (int i = FRSTNumber; i < FRSTNumber+MesNum; i++) {
-            LSTNumber++;
-            DemoOutObject outObject = new DemoOutObject(transaction_id, requirementsType,DemoHelper.DateTimeFormatter.get().format(new Date()), from, to, i );
-            outObject.setMsg_count(MesNum+"");
+        for (int i = 0; i < MesNum; i++) {
 
+            DemoOutObject outObject = new DemoOutObject(transaction_id, requirementsType.toString(),DemoHelper.DateTimeFormatter.get().format(new Date()), from, to, LSTNumber, i );
+            outObject.setMsg_count(MesNum);
+            LSTNumber++;
             Future<ClientResponse> response = webRes.type("application/json").post(ClientResponse.class, outObject.toJSon());
            // System.out.println("got" + response.getEntity(String.class));
             System.out.println("resp "+response.get().getEntity(String.class)+"");
