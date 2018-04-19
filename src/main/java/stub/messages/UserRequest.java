@@ -4,13 +4,13 @@ import stub.transaction.Step;
 
 public class UserRequest {
     String api;
-    RequestStep[] scenario;
+    Step[] scenario;
 
-    public RequestStep[] getScenario() {
+    public Step[] getScenario() {
         return scenario;
     }
 
-    public void setScenario(RequestStep[] scenario) {
+    public void setScenario(Step[] scenario) {
         this.scenario = scenario;
     }
 

@@ -19,6 +19,7 @@ public class SystemA extends MessageSender {
     public Response handle(DemoInObject in) {
         System.out.println("Hey! System A here");
         String res=processMessage(in, "SystemA");
+        System.out.println(res);
         return new Response(res);
     }
     /*@POST

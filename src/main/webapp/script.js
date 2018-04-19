@@ -24,21 +24,19 @@ $(document).ready(function() {
 });
 
 $(document).ready(function() {
-    $("#form").submit(function() {
-        alert('hi!');
+    $("#submit").click(function() {
         var jsonObj = [];
         $("#form").children('.step').each(function () {
         var source = $(this).find(".source").val();
         var target = $(this).find(".target").val();
-        var count = $(this).find(".count").val();
+        var count = new Number( $(this).find(".count").val());
         var item = {};
-        alert('item');
         item ["source"] = source;
         item ["target"] = target;
-        item ["count"] = count;
+        item ["numberOfMessagesToSend"] = count;
         jsonObj.push(item);
         });
-        var api = $(this).find(".api").val();
+        var api = $("#form").find(".api").val();
         var json = {
             "api": api,
             "scenario": jsonObj
@@ -49,10 +47,7 @@ $(document).ready(function() {
             contentType :"application/json",
             url: '/api/RoutingHandler',
             data: JSON.stringify(json),
-            dataType: 'json',
-            success : function(result) {
-                alert('wow');
-            }
+            dataType: 'json'
         });
     });
 });

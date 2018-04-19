@@ -2,7 +2,6 @@ package stub.rest;
 
 
 import stub.helpers.RequirementsTypes;
-import stub.messages.RequestStep;
 import stub.messages.UserRequest;
 import stub.transaction.Step;
 import stub.transaction.Transaction;
@@ -25,9 +24,9 @@ public class onClickHandler {
         System.out.println("Click!");
         if(request.getApi()==null|| request.getApi().length()==0) return;
         Transaction transaction = new Transaction(RequirementsTypes.Routing, request.getApi());
-        for (RequestStep step: request.getScenario()){
-            if(step.getSource().equals("Source")||step.getTarget().equals("Target"))return;
-            transaction.addStep(step.getSource(), step.getTarget(), Integer.parseInt(step.getCount()));
+        for (Step step: request.getScenario()){
+            if(step.source.equals("Source")||step.target.equals("Target"))return;
+            transaction.addStep(step);
         }
         transaction.startTransaction();
     }
