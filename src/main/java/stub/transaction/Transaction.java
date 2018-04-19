@@ -1,16 +1,13 @@
 package stub.transaction;
 
 import stub.exceptions.AlreadyGotTheMes;
-import stub.exceptions.IncorrectRequirementsystemMaping;
 import stub.exceptions.MesONisOutOfBounds;
-import stub.exceptions.NoSuchSystem;
 import stub.helpers.RequirementsTypes;
 import stub.messages.DemoInObject;
 import stub.rest.SystemA;
 import stub.rest.SystemB;
 import stub.rest.SystemC;
 import stub.rest.SystemD;
-import stub.systems.ExistingSystem;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -48,11 +45,15 @@ public class Transaction {
     public void addStep(Step Step){
         Scenario.add(Step);
         NumberOfSteps++;
-        expected_message_number+=Step.NumberOfMessagesToSend;
+        expected_message_number+=Step.numberOfMessagesToSend;
         inMessages = new DemoInObject[expected_message_number];
     }
-    public void addStep(ExistingSystem Source, ExistingSystem Target, int NumberOfMessagesToSend){
-        Scenario.add( new Step(Source, Target, NumberOfMessagesToSend));
+    public void addStep(String Source, String Target, int NumberOfMessagesToSend){
+        Step step =  new Step();
+        step.source=Source;
+        step.target=Target;
+        step.numberOfMessagesToSend=NumberOfMessagesToSend;
+        Scenario.add(step);
         expected_message_number+=NumberOfMessagesToSend;
         NumberOfSteps++;
         inMessages = new DemoInObject[expected_message_number];
@@ -61,27 +62,28 @@ public class Transaction {
     public void deleteStep(Step Step){
        if(Scenario.contains(Step)) {
            NumberOfSteps--;
-           expected_message_number -= Step.NumberOfMessagesToSend;
+           expected_message_number -= Step.numberOfMessagesToSend;
            Scenario.remove(Step);
 
            inMessages = new DemoInObject[expected_message_number];
        }
     }
 
-    public void startTransaction() throws InterruptedException, ExecutionException, NoSuchSystem, IncorrectRequirementsystemMaping {
+    public void startTransaction() throws InterruptedException, ExecutionException{
         Transactions.put(transaction_id, this);
         Status = TransactionStatus.Opened;
+        System.out.println("startTransaction");
         int j=0; //итератор для подсчета номера сообщения в транзакции, а не в рамках одного шага.
         for(Step step: Scenario) {
             if(Status==TransactionStatus.Failed) break;
-            if ("SystemA".equals(step.Target.getSystemName())) {
-                j =SystemA.sendMessage(transaction_id, step.NumberOfMessagesToSend, step.Source, step.Target, API, Requirement, j);
-            } else if ("SystemB".equals(step.Target.getSystemName())) {
-                j= SystemB.sendMessage(transaction_id, step.NumberOfMessagesToSend, step.Source, step.Target, API, Requirement, j);
-            } else if ("SystemC".equals(step.Target.getSystemName())) {
-                j = SystemC.sendMessage(transaction_id, step.NumberOfMessagesToSend, step.Source, step.Target, API, Requirement, j);
-            } else if ("SystemD".equals(step.Target.getSystemName())) {
-                j = SystemD.sendMessage(transaction_id, step.NumberOfMessagesToSend, step.Source, step.Target, API, Requirement, j);
+            if ("SystemA".equals(step.target)) {
+                j =SystemA.sendMessage(transaction_id, step.numberOfMessagesToSend, step.source, step.target, API, Requirement, j);
+            } else if ("SystemB".equals(step.target)) {
+                j= SystemB.sendMessage(transaction_id, step.numberOfMessagesToSend, step.source, step.target, API, Requirement, j);
+            } else if ("SystemC".equals(step.target)) {
+                j = SystemC.sendMessage(transaction_id, step.numberOfMessagesToSend, step.source, step.target, API, Requirement, j);
+            } else if ("SystemD".equals(step.target)) {
+                j = SystemD.sendMessage(transaction_id, step.numberOfMessagesToSend, step.source, step.target, API, Requirement, j);
             }
         }
 

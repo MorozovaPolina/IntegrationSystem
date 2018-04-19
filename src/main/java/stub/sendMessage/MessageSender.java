@@ -6,18 +6,17 @@ import com.sun.jersey.api.client.ClientResponse;
 import stub.helpers.DemoHelper;
 import stub.helpers.RequirementsTypes;
 import stub.messages.DemoOutObject;
-import stub.systems.ExistingSystem;
 
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 public class MessageSender {
-    public static int sendMessage(int transaction_id, int MesNum, ExistingSystem from, ExistingSystem to, String API, RequirementsTypes requirementsType, int FRSTNumber ) throws InterruptedException, ExecutionException {
+    public static int sendMessage(int transaction_id, int MesNum, String from, String to, String API, RequirementsTypes requirementsType, int FRSTNumber ) throws InterruptedException, ExecutionException {
         Client client = new Client();
         AsyncWebResource webRes = client.asyncResource(API);
         int LSTNumber=FRSTNumber;
-
+        System.out.println("messageSender");
         for (int i = FRSTNumber; i < FRSTNumber+MesNum; i++) {
             LSTNumber++;
             DemoOutObject outObject = new DemoOutObject(transaction_id, requirementsType,DemoHelper.DateTimeFormatter.get().format(new Date()), from, to, i );

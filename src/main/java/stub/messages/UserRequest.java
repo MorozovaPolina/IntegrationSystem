@@ -1,25 +1,17 @@
 package stub.messages;
 
+import stub.transaction.Step;
+
 public class UserRequest {
-    String source;
-    String target;
-    String count;
     String api;
+    Step[] scenario;
 
-    public String getTarget() {
-        return target;
+    public Step[] getScenario() {
+        return scenario;
     }
 
-    public void setTarget(String target) {
-        this.target = target;
-    }
-
-    public String getSource() {
-        return source;
-    }
-
-    public void setSource(String source) {
-        this.source = source;
+    public void setScenario(Step[] scenario) {
+        this.scenario = scenario;
     }
 
     public String getApi() {
@@ -28,13 +20,5 @@ public class UserRequest {
 
     public void setApi(String api) {
         this.api = api;
-    }
-
-    public String getCount() {
-        return count;
-    }
-
-    public void setCount(String count) {
-        this.count = count;
     }
 }

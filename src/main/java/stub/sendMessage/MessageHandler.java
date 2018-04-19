@@ -3,17 +3,12 @@ package stub.sendMessage;
 import stub.exceptions.*;
 import stub.helpers.RequirementsTypes;
 import stub.messages.DemoInObject;
-import stub.systems.ExistingSystem;
 import stub.transaction.Transaction;
-import stub.transaction.TransactionStatus;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 import static stub.helpers.Constants.SecondsToWaitForAnOrdinaryMessage;
 import static stub.helpers.GlobalValues.Transactions;
-import static stub.systems.ExistingSystem.getSystem;
-import static stub.transaction.TransactionStatus.*;
 
 public class MessageHandler {
 
@@ -23,7 +18,6 @@ public class MessageHandler {
     public static String processMessage(DemoInObject in, String recieverName){
         Transaction Transaction=null;
         RequirementsTypes Requirement;
-        ExistingSystem Target;
         try {
            Transaction = getTransaction(in.getTransaction_id());
         } catch (AlreadyClosedTransaction alreadyClosedTransaction) {
@@ -46,15 +40,7 @@ public class MessageHandler {
             return incorrectRequirement.getMessage().toString();
         }
         try {
-            Target = getTarget(Requirement, in.getTarget(), recieverName);
-        } catch (NoSuchSystem noSuchSystem) {
-            noSuchSystem.printStackTrace();
-            Transaction.markAsFailed();
-            return noSuchSystem.getMessage().toString();
-        } catch (IncorrectRequirementsystemMaping incorrectRequirementsystemMaping) {
-            incorrectRequirementsystemMaping.printStackTrace();
-            Transaction.markAsFailed();
-            return incorrectRequirementsystemMaping.getMessage().toString();
+            checkTarget(Requirement, in.getTarget(), recieverName);
         } catch (WrongMessageReceiver wrongMessageReceiver) {
             wrongMessageReceiver.printStackTrace();
             Transaction.markAsFailed();
@@ -79,7 +65,7 @@ public class MessageHandler {
         }
 
         try {
-            checkWaitingTime(in, SecondsToWaitForAnOrdinaryMessage);
+            checkWaitingTime(in, SecondsToWaitForAnOrdinaryMessage, Transaction.transaction_id);
         } catch (WaitingTimeExceeded waitingTimeExceeded) {
             waitingTimeExceeded.printStackTrace();
             Transaction.markAsFailed();
@@ -107,18 +93,11 @@ public class MessageHandler {
         return null;
     }
 
-    public static ExistingSystem getTarget(RequirementsTypes Requirement, String Target, String recieverName) throws NoSuchSystem, IncorrectRequirementsystemMaping, WrongMessageReceiver {
-        ExistingSystem target;
-        try {
-            target=getSystem(Target);
-        } catch (NoSuchSystem noSuchSystem) {
-            throw noSuchSystem;
+    public static void checkTarget(RequirementsTypes Requirement, String Target, String recieverName) throws WrongMessageReceiver {
+
+        if(!Target.equals(recieverName)){
+            throw new WrongMessageReceiver(recieverName, Target);
         }
-        if (!target.getAvailableRequirements().contains(Requirement)) throw new IncorrectRequirementsystemMaping(Requirement.toString(), Target);
-        if(!target.getSystemName().equals(recieverName)){
-            throw new WrongMessageReceiver();
-        }
-        return target;
     }
 
     public static RequirementsTypes getRequirement (String requirement) throws IncorrectRequirement {
@@ -132,8 +111,8 @@ public class MessageHandler {
                 Transaction.Requirement.toString(), in.getRequirement());
     }
 
-    public static void checkWaitingTime(DemoInObject in, int secondsToWait) throws WaitingTimeExceeded {
-        if(new Date().getTime() - Date.parse(in.getTime())> secondsToWait)throw new WaitingTimeExceeded();
+    public static void checkWaitingTime(DemoInObject in, int secondsToWait, int transaction) throws WaitingTimeExceeded {
+        if(new Date().getTime() - Date.parse(in.getTime())> secondsToWait)throw new WaitingTimeExceeded(transaction);
     }
 
 }

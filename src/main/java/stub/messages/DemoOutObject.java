@@ -2,7 +2,6 @@ package stub.messages;
 
 import stub.helpers.DemoHelper;
 import stub.helpers.RequirementsTypes;
-import stub.systems.ExistingSystem;
 
 import java.util.Date;
 
@@ -24,8 +23,8 @@ public class DemoOutObject {
         this.order_number = order_number;
     }
 
-    public DemoOutObject(int request_id, RequirementsTypes transaction_type, String time, ExistingSystem source, ExistingSystem target, int order_number) {
-        this(request_id+"", transaction_type.toString(), time, source.getSystemName(), target.getSystemName(), order_number+"");
+    public DemoOutObject(int request_id, RequirementsTypes transaction_type, String time, String source, String target, int order_number) {
+        this(request_id+"", transaction_type.toString(), time, source, target, order_number+"");
     }
 
     public DemoOutObject(DemoInObject in) {

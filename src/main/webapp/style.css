@@ -1,0 +1,37 @@
+.removeBT{
+    margin: 5px;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+}
+.addBT {
+    margin: 5px;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+}
+.source {
+    margin: 5px;
+    width: 200px;
+    height: 25px;
+}
+.target{
+    margin: 5px;
+    width: 200px;
+    height: 25px;
+}
+.count{
+    margin: 5px;
+    width: 200px;
+    height: 25px;
+}
+.api{
+    margin: 5px;
+    width: 700px;
+    height: 25px;
+}
+.submit {
+    margin: 5px;
+    width: 200px;
+    height: 25px;
+}
