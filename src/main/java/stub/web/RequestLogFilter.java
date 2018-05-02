@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static stub.rest.systems.AbstractSystem.addToLog;
+
 public class RequestLogFilter implements Filter {
     private Logger logger = LoggerFactory.getLogger("requestLogger");
     private String nodeId = Integer.toHexString((int)(Math.random() * 256)) + "-";
@@ -19,7 +21,8 @@ public class RequestLogFilter implements Filter {
         RequestWrapper wrappedRequest = new RequestWrapper((HttpServletRequest) request);
         try {
             Thread.currentThread().setName(nodeId + requestId.incrementAndGet());
-            logger.info(wrappedRequest.getRemoteAddr() + " " + wrappedRequest.getMethod() + " " + wrappedRequest.getRequestURI() + " " + wrappedRequest.getContent());
+           // if(!wrappedRequest.getRemoteAddr().equals("0:0:0:0:0:0:0:1"))
+            addToLog("got message for " + wrappedRequest.getRemoteAddr() + " " + wrappedRequest.getMethod() + " " + wrappedRequest.getRequestURI() + " " + wrappedRequest.getContent());
             filterChain.doFilter(wrappedRequest, response);
 
         }

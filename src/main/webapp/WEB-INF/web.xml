@@ -31,17 +31,5 @@
         <servlet-name>jersey</servlet-name>
         <url-pattern>/api/*</url-pattern>
     </servlet-mapping>
-    <!--      <servlet-mapping>
-           <servlet-name>onClickHandler</servlet-name>
-           <url-pattern>/api/onClickHandler</url-pattern>
-       </servlet-m
 
-      <servlet>
-           <servlet-name>onClickHandler</servlet-name>
-           <servlet-class>stub.rest.onClickHandler</servlet-class>
-   </servlet>
-       <servlet-mapping>
-           <servlet-name>onClickHandler</servlet-name>
-           <url-pattern>/onClickHandler</url-pattern>
-       </servlet-mapping>-->
 </web-app>
