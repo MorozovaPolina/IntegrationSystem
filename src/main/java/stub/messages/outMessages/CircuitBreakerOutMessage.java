@@ -4,9 +4,9 @@ public class CircuitBreakerOutMessage extends AbstractOutMessage {
     boolean toBeRejected;
     int numberOfRejections;
 
-    public CircuitBreakerOutMessage(int request_id, String transaction_type, String time, String source, String target,
+    public CircuitBreakerOutMessage(int session_id, String requirement, String time, String source, String target,
                                     int order_number, int order_number_in_step, boolean toBeRejected, int numberOfRejections) {
-        super(request_id, transaction_type, time, source, target, order_number, order_number_in_step);
+        super(session_id, requirement, time, source, target, order_number, order_number_in_step);
         this.numberOfRejections=numberOfRejections;
         this.toBeRejected=toBeRejected;
     }

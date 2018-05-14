@@ -1,8 +1,10 @@
 package stub.messages.outMessages;
 
 
+import com.google.gson.Gson;
+
 public abstract class AbstractOutMessage {
-    int transaction_id;
+    int session_id;
     String requirement;
     String time;
     String source;
@@ -12,10 +14,10 @@ public abstract class AbstractOutMessage {
     int order_number_in_step;
     boolean isInternal;
 
-    public AbstractOutMessage(int request_id, String transaction_type, String time, String source, String target,
+    public AbstractOutMessage(int session_id, String requirement, String time, String source, String target,
                               int order_number, int order_number_in_step) {
-        this.transaction_id= request_id;
-        this.requirement = transaction_type;
+        this.session_id= session_id;
+        this.requirement = requirement;
         this.time = time;
         this.source = source;
         this.target = target;
@@ -24,12 +26,16 @@ public abstract class AbstractOutMessage {
         isInternal=true;
     }
 
-    public void setTransaction_id(int transaction_id) {
-        this.transaction_id = transaction_id;
+    public String toJSON() {
+        return new Gson().toJson(this);
+    };
+
+    public void setSession_id(int session_id) {
+        this.session_id = session_id;
     }
 
-    public int getTransaction_id() {
-        return transaction_id;
+    public int getSession_id() {
+        return session_id;
     }
 
     public void setRequirement(String requirement) {

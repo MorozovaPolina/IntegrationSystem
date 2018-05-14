@@ -3,24 +3,21 @@ package stub.messages.inMessages;
 import com.google.gson.Gson;
 
 public abstract class AbstractInMessage {
-    int transaction_id;
+    int session_id;
     String requirement;
     String time;
     int order_number;
     int msg_count;
     int order_number_in_step;
-    public boolean isInternal;
+    boolean isInternal;
 
-    public String toJSON() {
-        return new Gson().toJson(this);
-    };
 
-    public void setTransaction_id(int transaction_id) {
-        this.transaction_id = transaction_id;
+    public void setSession_id(int session_id) {
+        this.session_id = session_id;
     }
 
-    public int getTransaction_id() {
-        return transaction_id;
+    public int getSession_id() {
+        return session_id;
     }
 
     public void setRequirement(String requirement) {
@@ -39,11 +36,11 @@ public abstract class AbstractInMessage {
         return time;
     }
 
-    public boolean isInternal() {
+    public boolean getIsInternal() {
         return isInternal;
     }
 
-    public void setInternal(boolean internal) {
+    public void setIsInternal(boolean internal) {
         isInternal = internal;
     }
 

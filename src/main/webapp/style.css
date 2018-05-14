@@ -4,6 +4,11 @@
     height: 25px;
     border-radius: 50%;
 }
+.Steps{
+     height: 350px;
+     width: 750px;
+     overflow: auto;
+ }
 .addBT {
     margin: 5px;
     width: 25px;
@@ -50,4 +55,9 @@
     margin: 5px;
     width: 200px;
     height: 25px;
+}
+.log{
+    height: 350px;
+    width: 1500px;
+    overflow: auto;
 }

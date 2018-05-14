@@ -27,7 +27,7 @@ import static stub.rest.systems.MessageHandler.*;
 @Consumes(MediaType.APPLICATION_JSON)
 public abstract class AbstractSystem {
     String name;
-    private static Logger logger = LoggerFactory.getLogger("requestLogger");
+    public static Logger logger = LoggerFactory.getLogger("requestLogger");
     public AbstractSystem(String name){
         this.name=name;
     }
@@ -36,7 +36,7 @@ public abstract class AbstractSystem {
         Client client = new Client();
         AsyncWebResource webRes = client.asyncResource(API);
         addToLog("send to " + API+" message "+message);
-        Future<ClientResponse> response = webRes.type("application/json").post(ClientResponse.class, message);
+        webRes.type("application/json").post(ClientResponse.class, message);
     }
 
     public static void addToLog(String message) {

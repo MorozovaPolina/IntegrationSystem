@@ -1,6 +1,6 @@
 package stub.messages.inMessages;
 
-import stub.transaction.Step;
+import stub.session.Step;
 
 public class TransformationInMessage extends AbstractInMessage {
     Step step;

@@ -1,6 +1,6 @@
 package stub.messages.request;
 
-import stub.transaction.Step;
+import stub.session.Step;
 
 public abstract class AbstractUserRequest {
     String api;

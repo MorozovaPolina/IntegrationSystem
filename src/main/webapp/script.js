@@ -12,9 +12,7 @@ $(document).ready(function() {
 $(document).ready(function() {
     $(".removeBT").click(function () {
         if($(".step").length>1) {
-            // $(this).parent().fadeOut(300);
             var next = $(this).parent().next($(this).parent()).attr("class");
-            // alert(next!="step");
             if(next!="step"){
                 $(this).parent().prev($(this).parent()).find(".addBT").fadeIn(30);
             }
@@ -25,10 +23,12 @@ $(document).ready(function() {
 
 function createSteps($form){
     var jsonObj = [];
+    alert('steps');
     $form.children('.step').each(function () {
         var source = $(this).find(".source").val();
         var target = $(this).find(".target").val();
         var count = new Number( $(this).find(".count").val());
+        alert('s:' + source+" t: "+ target+" MC: "+count);
         var item = {};
         item ["source"] = source;
         item ["target"] = target;
@@ -80,8 +80,7 @@ $(document).ready(function() {
 
 $(document).ready(function() {
     $("#submitCB").click(function() {
-        alert("Hi");
-        var jsonObj = createSteps($("#form"));
+        var jsonObj = createSteps($($("#form").children(".Steps")));
         var api = $("#form").find(".api").val();
         var Message = Number($("#form").find(".messageToRej").val());
         var NumberOfRejection = Number($("#form").find(".RejTime").val());
@@ -107,6 +106,27 @@ $(document).ready(function() {
         post(json, '/api/Transformation');
     });
 });
+$(document).ready(function () {
+    var  myVar = setInterval(log, 2000000);
+
+})
+
+
+function log() {
+    $.ajax({
+        cache: false,
+        type: "GET",
+        contentType :"application/json",
+        url: '/api/log',
+        success: function (data) {
+            for(var i=0, len=data.length; i<len; i++) {
+                var logV=$("#log").val();
+                $("#log").val(data[i] + '\r\n' + logV);
+            };
+        }
+    });
+
+}
 function getFormData($form){
     var unindexedArray = $form.serializeArray();
     var indexedArray = {};
