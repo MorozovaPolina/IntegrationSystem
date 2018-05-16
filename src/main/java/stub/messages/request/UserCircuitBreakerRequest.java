@@ -1,23 +1,24 @@
 package stub.messages.request;
 
+import stub.session.toReject;
+
 public class UserCircuitBreakerRequest extends AbstractUserRequest {
-    int on_of_message_to_be_rejected;
-    int rejection_quantity;
+    toReject[] rejection;
+    int secondsAfterRejection;
 
-
-    public int getOn_of_message_to_be_rejected() {
-        return on_of_message_to_be_rejected;
+    public toReject[] getRejection() {
+        return rejection;
     }
 
-    public void setOn_of_message_to_be_rejected(int on_of_message_to_be_rejected) {
-        this.on_of_message_to_be_rejected = on_of_message_to_be_rejected;
+    public void setRejection(toReject[] rejection) {
+        this.rejection = rejection;
     }
 
-    public int getRejection_quantity() {
-        return rejection_quantity;
+    public int getSecondsAfterRejection() {
+        return secondsAfterRejection;
     }
 
-    public void setRejection_quantity(int rejection_quantity) {
-        this.rejection_quantity = rejection_quantity;
+    public void setSecondsAfterRejection(int secondsAfterRejection) {
+        this.secondsAfterRejection = secondsAfterRejection;
     }
 }

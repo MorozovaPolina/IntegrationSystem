@@ -1,7 +1,10 @@
 package stub.session;
 
 import com.google.gson.Gson;
+import stub.exceptions.AlreadyGotTheMes;
+import stub.exceptions.MesONisOutOfBounds;
 import stub.helpers.DemoHelper;
+import stub.messages.inMessages.AbstractInMessage;
 import stub.messages.outMessages.QueueOutMessage;
 
 import java.util.Date;
@@ -13,11 +16,14 @@ import static stub.helpers.GlobalValues.Sessions;
 public class QueueSession  extends AbstractSession{
 
     int maxSuitableMessageProcessingTime;
+    int minSuitableMessageProcessingTime;
+    Date lastMessageReceived;
 
 
-    public QueueSession(RequirementsTypes Requirement, String API, int maxSuitableMessageProcessingTime) {
+    public QueueSession(RequirementsTypes Requirement, String API, int maxSuitableMessageProcessingTime, int minSuitableMessageProcessingTime) {
         super(Requirement, API);
         this.maxSuitableMessageProcessingTime=maxSuitableMessageProcessingTime;
+        this.minSuitableMessageProcessingTime=minSuitableMessageProcessingTime;
     }
 
     @Override
@@ -30,7 +36,7 @@ public class QueueSession  extends AbstractSession{
             for (int i = 0; i < step.numberOfMessagesToSend; i++) {
                 QueueOutMessage outObject = new QueueOutMessage(session_id, Requirement.toString(),
                         DemoHelper.DateTimeFormatter.get().format(new Date()), step.source, step.target, j,
-                        i, maxSuitableMessageProcessingTime);
+                        i, maxSuitableMessageProcessingTime, minSuitableMessageProcessingTime);
                 outObject.setMsg_count(step.numberOfMessagesToSend);
                 j++;
                 String gson = new Gson().toJson(outObject);
@@ -46,5 +52,27 @@ public class QueueSession  extends AbstractSession{
 
     public void setMaxSuitableMessageProcessingTime(int maxSuitableMessageProcessingTime) {
         this.maxSuitableMessageProcessingTime = maxSuitableMessageProcessingTime;
+    }
+
+    public int getMinSuitableMessageProcessingTime() {
+        return minSuitableMessageProcessingTime;
+    }
+
+    public void setMinSuitableMessageProcessingTime(int minSuitableMessageProcessingTime) {
+        this.minSuitableMessageProcessingTime = minSuitableMessageProcessingTime;
+    }
+
+    public Date getLastMessageReceived() {
+        return lastMessageReceived;
+    }
+
+    public void receiveMessage(){
+        lastMessageReceived=new Date();
+    }
+
+    @Override
+    public void addMessage(AbstractInMessage in) throws MesONisOutOfBounds, AlreadyGotTheMes {
+    super.addMessage(in);
+    receiveMessage();
     }
 }

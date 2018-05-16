@@ -2,11 +2,8 @@ package stub.rest;
 
 
 import com.google.gson.Gson;
-import stub.messages.request.UserCircuitBreakerRequest;
-import stub.messages.request.UserTransformationRequest;
+import stub.messages.request.*;
 import stub.session.*;
-import stub.messages.request.UserQueueRequest;
-import stub.messages.request.UserRoutingRequest;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -15,6 +12,7 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
+import static stub.helpers.GlobalValues.Log;
 import static stub.helpers.GlobalValues.NewMessagesLog;
 
 @Path("")
@@ -40,8 +38,13 @@ public class RoutingHandler {
     @Path("QueueHandler")
     public void queueHandler(UserQueueRequest request) throws ExecutionException, InterruptedException {
         System.out.println("Queue");
-        if(request.getApi()==null|| request.getApi().length()==0||request.getSeconds_to_wait()<0) return;
-        QueueSession session = new QueueSession(RequirementsTypes.Queues, request.getApi(), request.getSeconds_to_wait());
+        if(request.getApi()==null|| request.getApi().length()==0
+                ||request.getMaxSuitableMessageProcessingTime()<0
+                ||request.getMinSuitableMessageProcessingTime()<0) return;
+        QueueSession session = new QueueSession(RequirementsTypes.Queues,
+                request.getApi(),
+                request.getMaxSuitableMessageProcessingTime(),
+                request.getMinSuitableMessageProcessingTime());
         for (Step step: request.getScenario()){
             if(step.getSource().equals("Source")||step.getTarget().equals("Target")||step.getNumberOfMessagesToSend()<=0)return;
             session.addStep(step);
@@ -53,13 +56,20 @@ public class RoutingHandler {
     @POST
     @Path("CBHandler")
     public void CBHandler (UserCircuitBreakerRequest request) throws ExecutionException, InterruptedException {
-        if(request.getApi()==null|| request.getApi().length()==0||request.getOn_of_message_to_be_rejected()<0||
-                request.getRejection_quantity()<=0) return;
+        System.out.println("CB Handler");
+        if(request.getApi()==null|| request.getApi().length()==0||request.getRejection().length==0) return;
         CircuitBreakerSession session = new CircuitBreakerSession(RequirementsTypes.CircuitBreaker,
-                request.getApi(), request.getOn_of_message_to_be_rejected(), request.getRejection_quantity());
+                request.getApi(), request.getSecondsAfterRejection());
         for (Step step: request.getScenario()){
             if(step.getSource().equals("Source")||step.getTarget().equals("Target")||step.getNumberOfMessagesToSend()<=0)return;
             session.addStep(step);
+        }
+        System.out.println(request.getRejection().length);
+        for(toReject rejection : request.getRejection()){
+            if(rejection.getNumberOfRejections()==0) return;
+
+            session.addRejection(rejection);
+            System.out.println(rejection.getNumberOfRejections()+" "+rejection.getRejectionMessage());
         }
         session.startSession();
     }
@@ -77,13 +87,22 @@ public class RoutingHandler {
     }
 
     @GET
-    @Path("log")
-    public Response logHandler(){
-        System.out.println("Hello, log!");
+    @Path("NewMes")
+    public Response newMesHandler(){
+       // System.out.println("Hello, log!");
         Gson gson = new Gson();
         String log = gson.toJson(NewMessagesLog);
-        System.out.println(log);
+       // System.out.println(log);
+        Log.addAll(NewMessagesLog);
         NewMessagesLog.clear();
+        return Response.status(Response.Status.OK).entity(log).build();
+    }
+
+    @GET
+    @Path("log")
+    public Response logHandler(){
+        Gson gson = new Gson();
+        String log = gson.toJson(Log);
         return Response.status(Response.Status.OK).entity(log).build();
     }
 }

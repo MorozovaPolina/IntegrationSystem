@@ -61,8 +61,8 @@ public class MessageHandler {
             checkInMessageAndSession(in, session);
             session.addMessage(in);
             checkMessageSequence(session, in);
-
-            checkWaitingTime(in, session.getMaxSuitableMessageProcessingTime(), session);
+            checkWaitingTimeLack(session.getLastMessageReceived(), session.getMinSuitableMessageProcessingTime(), session);
+            checkWaitingTimeExceeded(in, session.getMaxSuitableMessageProcessingTime(), session);
             System.out.println("all way");
 
         } catch (IncorrectRequirement incorrectRequirement) {
@@ -77,7 +77,8 @@ public class MessageHandler {
                 return noSessionFound.getMessage();
             }
             else{
-                session = new QueueSession(RequirementsTypes.Queues, "", 10000);
+                session = new QueueSession(RequirementsTypes.Queues, "", in.getMaxSuitableMessageProcessingTime(),
+                        in.getMinSuitableMessageProcessingTime());
                 Sessions.put(in.getSession_id(), session);
             }
         } catch (WrongMessageReceiver wrongMessageReceiver) {
@@ -98,6 +99,9 @@ public class MessageHandler {
         } catch (WaitingTimeExceeded waitingTimeExceeded) {
             session.markAsFailed();
             return waitingTimeExceeded.getMessage();
+        } catch (WaitingTimeLack waitingTimeLack) {
+            session.markAsFailed();
+            return waitingTimeLack.getMessage();
         }
         return tryToCloseSession(session);
     }
@@ -151,14 +155,17 @@ public class MessageHandler {
             Session = (CircuitBreakerSession) getSession(in.getSession_id());
             checkTarget(Requirement, in.getTarget(), receiverName);
             checkInMessageAndSession(in, Session);
+            if(Session.isReject()) checkWaitingTimeLack(Session.getLastMessageReceived(), Session.getSecondsAfterRejection(), Session);
             if(!in.isToBeRejected())
             Session.addMessage(in);
             else {
                 isRejectionRight(Session, in);
-                if(!Session.checkRejectionQuantity()) {
-                    Session.addRejection();
+                System.out.println("in mes "+ in.isToBeRejected() );
+                if(Session.reject(in.getOrder_number())) {
                     return null;
                 }
+                else
+                    Session.addMessage(in);
             }
         } catch (IncorrectRequirement incorrectRequirement) {
             return incorrectRequirement.getMessage();
@@ -173,8 +180,8 @@ public class MessageHandler {
             }
             else{
                 if(in.isToBeRejected())
-                Session = new CircuitBreakerSession(RequirementsTypes.CircuitBreaker, "",
-                        in.getOrder_number(), in.getNumberOfRejections());
+                Session = new CircuitBreakerSession(RequirementsTypes.CircuitBreaker, "", in.getSecondsAfterRejection());
+                Session.addRejection(in.getOrder_number(), in.getNumberOfRejections());
                 Sessions.put(in.getSession_id(), Session);
             }
         } catch (WrongMessageReceiver wrongMessageReceiver) {
@@ -190,11 +197,22 @@ public class MessageHandler {
             Session.markAsFailed();
             return alreadyGotTheMes.getMessage();
         } catch (stub.exceptions.differenceInRejectionMapping differenceInrejectionMapping) {
+            if(in.getIsInternal()) {
+                Session.markAsFailed();
+                return differenceInrejectionMapping.getMessage();
+            }
+            else {
+                Session.addRejection(in.getOrder_number(), in.getNumberOfRejections());
+                Session.reject(in.getOrder_number());
+                return null;
+            }
+        } catch (WaitingTimeLack waitingTimeLack) {
             Session.markAsFailed();
-            return differenceInrejectionMapping.getMessage();
+            return waitingTimeLack.getMessage();
         }
         return tryToCloseSession(Session);
     }
+
     public static AbstractSession getSession(int SessionID) throws NoSessionFound, AlreadyFailedSession, AlreadyClosedSession {
         if(!Sessions.containsKey(SessionID)){
             throw new NoSessionFound(SessionID);
@@ -230,9 +248,14 @@ public class MessageHandler {
                 session.getRequirement().toString(), in.getRequirement());
     }
 
-    public static void checkWaitingTime(AbstractInMessage in, int secondsToWait, AbstractSession session) throws WaitingTimeExceeded {
+    public static void checkWaitingTimeExceeded(AbstractInMessage in, int secondsToWait, AbstractSession session) throws WaitingTimeExceeded {
         if(new Date().getTime() - new Date(in.getTime()).getTime()> secondsToWait)
             throw new WaitingTimeExceeded(session.getSession_id(), session.getRequirement().toString());
+    }
+
+    public static void checkWaitingTimeLack(Date lastMessageReceiver, int secondsToWait, AbstractSession session) throws WaitingTimeLack {
+        if((new Date().getTime() - lastMessageReceiver.getTime())< secondsToWait)
+            throw new WaitingTimeLack(session.getSession_id(), session.getRequirement().toString());
     }
 
     public static void checkMessageSequence(AbstractSession session,AbstractInMessage in) throws IncorrectMessageSequence {
@@ -260,8 +283,8 @@ public class MessageHandler {
     }
 
     public static void isRejectionRight(CircuitBreakerSession session, CircuitBreakerInMessage in) throws differenceInRejectionMapping {
-        if(session.getMessageToReject()!=in.getOrder_number())
-            throw new differenceInRejectionMapping(session.getSession_id(), session.getMessageToReject(), in.getOrder_number() );
+        if(!session.checkRejection(in.getOrder_number()))
+            throw new differenceInRejectionMapping(session.getSession_id(), in.getOrder_number() );
 
     }
 

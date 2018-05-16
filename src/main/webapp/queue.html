@@ -9,34 +9,44 @@
 </head>
 <body>
 <h1>Create Steps</h1>
-<form id="form" action="" method="post">
-    <div class="step" id="step1" name="step">
-        <select size="1" id="source" name="source" class="source">
-            <option disabled selected value="Source">Source</option>
-            <option value="SystemA">SystemA</option>
-            <option value="SystemB">SystemB</option>
-            <option value="SystemC">SystemC</option>
-            <option value="SystemD">SystemD</option>
-        </select>
-        <select size="1" id="target" name="target" class="target">
-            <option disabled selected value="Target">Target</option>
-            <option value="SystemA">SystemA</option>
-            <option value="SystemB">SystemB</option>
-            <option value="SystemC">SystemC</option>
-            <option value="SystemD">SystemD</option>
-        </select>
-        <input type="number" class="count" id="count" name="count" placeholder="count" min="1"/>
-        <button type="button" id="removeBT" class="removeBT" value="-">-</button>
-        <button type="button" id="addBT" class="addBT" value="+">+</button>
+<form id="form" action="" method="post" class="proc">
+    <div id="Steps" name="Steps" class="Steps">
+        <div class="step" id="step1" name="step">
+            <select size="1" id="source" name="source" class="source">
+                <option disabled selected value="Source">Source</option>
+                <option value="SystemA">SystemA</option>
+                <option value="SystemB">SystemB</option>
+                <option value="SystemC">SystemC</option>
+                <option value="SystemD">SystemD</option>
+            </select>
+            <select size="1" id="target" name="target" class="target">
+                <option disabled selected value="Target">Target</option>
+                <option value="SystemA">SystemA</option>
+                <option value="SystemB">SystemB</option>
+                <option value="SystemC">SystemC</option>
+                <option value="SystemD">SystemD</option>
+            </select>
+            <input type="number" class="count" id="count" name="count" placeholder="count" min="1"/>
+            <button type="button" id="removeBT" class="removeBT" value="-">-</button>
+            <button type="button" id="addBT" class="addBT" value="+">+</button>
+        </div>
     </div>
     <div>
-    <input type="number" id="seconds" name="seconds" min="0" class="secondsForProcessing" placeholder="seconds for processing">
+        <input type="number" id="minSeconds" name="minSeconds" min="0" class="secondsForProcessing" placeholder="minimum seconds for processing">
+        <input type="number" id="maxSeconds" name="maxSeconds" min="0" class="secondsForProcessing" placeholder="maximum seconds for processing">
     </div>
     <div>
         <input type="text" id="api" name = "api" class="api" placeholder="url address">
     </div>
-    <div><button type="button" id="submitQueue" class ="submit" onclick="location.href='index.html'">Submit</button></div>
-    <div></div>
+    <div>
+        <button type="button" id="submitQueue" class ="submit" onclick="location.href='index.html'">Submit</button>
+        <button type="button" id="cancel" class="submit" onclick="location.href='index.html'">Cancel</button>
+    </div>
 </form>
+<div>
+    <form action="" method="get">
+        <textarea id="log" name="log" class="log" disabled></textarea>
+    </form>
+</div>
 </body>
 </html>

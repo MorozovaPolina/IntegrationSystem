@@ -9,7 +9,8 @@
 </head>
 <body>
 <h1>Create Steps</h1>
-<form id="form" action="" method="post">
+<form id="form" action="" method="post" class="proc">
+    <div style="display: flex">
     <div id="Steps" name="Steps" class="Steps">
         <div class="step">
             <select size="1" id="source" name="source" class="source">
@@ -31,19 +32,27 @@
             <button type="button" id="addBT" class="addBT" value="+">+</button>
         </div>
     </div>
+        <div class="toReject" id="Rejection" name="Rejection">
+            <div id="reject1" class="reject" name ="reject">
+                <input type="number" id="messageToRej" name="messageToRej" placeholder="Message to reject" class="messageToRej" min="1">
+                <input type="number" id="RejTime" name="RejTime" placeholder="Number of rejections" class="RejTime" min="1">
+                <button type="button" id="removeR" class="removeR" value="-">-</button>
+                <button type="button" id="addR" class="addR" value="+">+</button>
+            </div>
+        </div>
+    </div>
     <div>
-        <input type="number" id="rejectionMessage" placeholder="Message to reject" class="messageToRej">
-        <input type="number" id="numberOfRejections" placeholder="Number of rejections" class="RejTime">
+        <input type="number" id="minRej" name="minRej" class="secondsForProcessing" placeholder="seconds to wait for message after rejection">
     </div>
     <div>
         <input type="text" id="api" name = "api" class="api" placeholder="url address"></div>
     <div><button type="button" id="submitCB" class ="submit" onclick="location.href='index.html'">Submit</button>
     <button type="button" id="cancel" class="submit" onclick="location.href='index.html'">Cancel</button> </div>
-    <div>
-        <form action="" method="get">
+</form>
+<div>
+    <form action="" method="get">
             <textarea id="log" name="log" class="log" disabled></textarea>
         </form>
-    </div>
-</form>
+</div>
 </body>
 </html>

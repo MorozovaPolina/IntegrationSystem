@@ -5,6 +5,7 @@ public class CircuitBreakerInMessage extends AbstractInMessage {
     String target;
     boolean toBeRejected;
     int numberOfRejections;
+    int secondsAfterRejection;
 
     public void setNumberOfRejections(int numberOfRejections) {
         this.numberOfRejections = numberOfRejections;
@@ -36,5 +37,13 @@ public class CircuitBreakerInMessage extends AbstractInMessage {
 
     public void setTarget(String target) {
         this.target = target;
+    }
+
+    public int getSecondsAfterRejection() {
+        return secondsAfterRejection;
+    }
+
+    public void setSecondsAfterRejection(int secondsAfterRejection) {
+        this.secondsAfterRejection = secondsAfterRejection;
     }
 }

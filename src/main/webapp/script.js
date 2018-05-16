@@ -1,4 +1,5 @@
 var Num =1;
+var R=1;
 $(document).ready(function() {
     $(".addBT").click(function() {
         Num++;
@@ -21,14 +22,37 @@ $(document).ready(function() {
     });
 });
 
+$(document).ready(function() {
+    $(".addR").click(function() {
+        R++;
+        var newSection = $(this).parent().clone(true, true).attr("id", "reject" + R);
+        newSection.insertAfter($(this).parent());
+        $(this).fadeOut(20);
+        // $(".step").last().append(newSection);
+        newSection.text($('newSection').attr('id'));
+    });
+});
+$(document).ready(function() {
+    $(".removeR").click(function () {
+       // alert("remove rej 1");
+        if($(".reject").length>1) {
+            var next = $(this).parent().next($(this).parent()).attr("class");
+            if(next!="reject"){
+                $(this).parent().prev($(this).parent()).find(".addR").fadeIn(30);
+            }
+            $(this).parent().remove();
+        };
+    });
+});
+
 function createSteps($form){
     var jsonObj = [];
-    alert('steps');
+  //  alert('steps name ' + $(this).attr("name"));
     $form.children('.step').each(function () {
         var source = $(this).find(".source").val();
         var target = $(this).find(".target").val();
         var count = new Number( $(this).find(".count").val());
-        alert('s:' + source+" t: "+ target+" MC: "+count);
+       // alert('s:' + source+" t: "+ target+" MC: "+count);
         var item = {};
         item ["source"] = source;
         item ["target"] = target;
@@ -49,9 +73,23 @@ function post(json, url){
     });
 }
 
+function createRejection($form){
+    var jsonObj = [];
+    $form.children('.reject').each(function () {
+        var rejectionMessage = new Number($(this).find(".messageToRej").val());
+        var numberOfRejections= new Number($(this).find(".RejTime").val());
+       // alert("rej Name: "+$(this).attr("name")+" "+numberOfRejections);
+        var item = {};
+        item ["rejectionMessage"] = rejectionMessage;
+        item ["numberOfRejections"] = numberOfRejections;
+        jsonObj.push(item);
+    });
+    return jsonObj;
+}
+
 $(document).ready(function() {
     $("#submitRouting").click(function() {
-       var jsonObj = createSteps($("#form"));
+       var jsonObj = createSteps($("#Steps"));
         var api = $("#form").find(".api").val();
         var json = {
             "api": api,
@@ -65,13 +103,15 @@ $(document).ready(function() {
 
 $(document).ready(function() {
     $("#submitQueue").click(function() {
-        var jsonObj = createSteps($("#form"));
+        var jsonObj = createSteps($("#Steps"));
         var api = $("#form").find(".api").val();
-        var seconds = Number($("#form").find(".secondsForProcessing").val());
+        var seconds = Number($("#maxSeconds").val());
+        var minSuitableMessageProcessingTime = Number($("#minSeconds").val());
         var json = {
             "api": api,
             "scenario": jsonObj,
-            "seconds_to_wait": seconds
+            "maxSuitableMessageProcessingTime": seconds,
+            "minSuitableMessageProcessingTime": minSuitableMessageProcessingTime
         };
 
         post(json, '/api/QueueHandler');
@@ -80,15 +120,13 @@ $(document).ready(function() {
 
 $(document).ready(function() {
     $("#submitCB").click(function() {
-        var jsonObj = createSteps($($("#form").children(".Steps")));
+        var jsonObj = createSteps($("#Steps"));
+        var rejections=createRejection($("#Rejection"));
         var api = $("#form").find(".api").val();
-        var Message = Number($("#form").find(".messageToRej").val());
-        var NumberOfRejection = Number($("#form").find(".RejTime").val());
         var json = {
             "api": api,
             "scenario": jsonObj,
-            "on_of_message_to_be_rejected": Message,
-            "rejection_quantity":NumberOfRejection
+            "rejection": rejections
         };
 
         post(json, '/api/CBHandler');
@@ -97,17 +135,20 @@ $(document).ready(function() {
 
 $(document).ready(function() {
     $("#submitTransformation").click(function() {
-        var jsonObj = createSteps($("#form"));
+        var jsonObj = createSteps($("#Steps"));
         var api = $("#form").find(".api").val();
+        var secondsAfterRejection = $("#minRej").val();
         var json = {
             "api": api,
-            "scenario": jsonObj
+            "scenario": jsonObj,
+            "secondsAfterRejection": secondsAfterRejection
         };
         post(json, '/api/Transformation');
     });
 });
 $(document).ready(function () {
-    var  myVar = setInterval(log, 2000000);
+    log();
+    var  myVar = setInterval(newMes, 2000);
 
 })
 
@@ -121,6 +162,22 @@ function log() {
         success: function (data) {
             for(var i=0, len=data.length; i<len; i++) {
                 var logV=$("#log").val();
+                $("#log").val(data[i] + '\r\n' + logV);
+            };
+        }
+    });
+}
+function newMes() {
+    $.ajax({
+        cache: false,
+        type: "GET",
+        contentType :"application/json",
+        url: '/api/NewMes',
+        success: function (data) {
+            for(var i=0, len=data.length; i<len; i++) {
+                var logV=$("#log").val();
+                if(data[i].indexOf('Session will be marked as failed')!=-1||data[i].indexOf("All messages received")!=-1)
+                    alert(data[i]);
                 $("#log").val(data[i] + '\r\n' + logV);
             };
         }

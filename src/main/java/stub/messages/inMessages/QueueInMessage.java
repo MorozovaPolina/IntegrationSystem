@@ -3,14 +3,23 @@ package stub.messages.inMessages;
 public class QueueInMessage extends AbstractInMessage {
     String source;
     String target;
-    int seconds_to_wait;
+    int maxSuitableMessageProcessingTime;
+    int minSuitableMessageProcessingTime;
 
-    public void setSeconds_to_wait(int seconds_to_wait) {
-        this.seconds_to_wait = seconds_to_wait;
+    public int getMinSuitableMessageProcessingTime() {
+        return minSuitableMessageProcessingTime;
     }
 
-    public int getSeconds_to_wait() {
-        return seconds_to_wait;
+    public void setMinSuitableMessageProcessingTime(int minSuitableMessageProcessingTime) {
+        this.minSuitableMessageProcessingTime = minSuitableMessageProcessingTime;
+    }
+
+    public int getMaxSuitableMessageProcessingTime() {
+        return maxSuitableMessageProcessingTime;
+    }
+
+    public void setMaxSuitableMessageProcessingTime(int maxSuitableMessageProcessingTime) {
+        this.maxSuitableMessageProcessingTime = maxSuitableMessageProcessingTime;
     }
 
     public String getSource() {

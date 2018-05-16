@@ -14,5 +14,6 @@ public class GlobalValues {
     Чтобы не лезть и не проверять, какой следующий номер свободен,
     будем хранить следующий возможный номер в данной переменной*/
     public static ArrayList<String> NewMessagesLog = new ArrayList<>();
+    public static ArrayList<String> Log = new ArrayList<>();
 
 }
