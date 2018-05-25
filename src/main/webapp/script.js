@@ -75,15 +75,19 @@ function post(json, url){
 
 function createRejection($form){
     var jsonObj = [];
+
     $form.children('.reject').each(function () {
+
         var rejectionMessage = new Number($(this).find(".messageToRej").val());
         var numberOfRejections= new Number($(this).find(".RejTime").val());
        // alert("rej Name: "+$(this).attr("name")+" "+numberOfRejections);
         var item = {};
         item ["rejectionMessage"] = rejectionMessage;
         item ["numberOfRejections"] = numberOfRejections;
+      //  alert(rejectionMessage+" "+numberOfRejections)
         jsonObj.push(item);
     });
+   // alert('CB + rej all ' + jsonObj);
     return jsonObj;
 }
 
@@ -105,8 +109,8 @@ $(document).ready(function() {
     $("#submitQueue").click(function() {
         var jsonObj = createSteps($("#Steps"));
         var api = $("#form").find(".api").val();
-        var seconds = Number($("#maxSeconds").val());
-        var minSuitableMessageProcessingTime = Number($("#minSeconds").val());
+        var seconds = new Number($("#maxSeconds").val());
+        var minSuitableMessageProcessingTime = new Number($("#minSeconds").val());
         var json = {
             "api": api,
             "scenario": jsonObj,
@@ -120,12 +124,16 @@ $(document).ready(function() {
 
 $(document).ready(function() {
     $("#submitCB").click(function() {
+
         var jsonObj = createSteps($("#Steps"));
         var rejections=createRejection($("#Rejection"));
-        var api = $("#form").find(".api").val();
+        //alert("rej done")
+        var secondAfterrejection = $("#form").find("#minRej").val();
+        var api = $("#api").val();
         var json = {
             "api": api,
             "scenario": jsonObj,
+            "secondsAfterRejection": secondAfterrejection,
             "rejection": rejections
         };
 
@@ -137,7 +145,8 @@ $(document).ready(function() {
     $("#submitTransformation").click(function() {
         var jsonObj = createSteps($("#Steps"));
         var api = $("#form").find(".api").val();
-        var secondsAfterRejection = $("#minRej").val();
+        alert("Cb1");
+        var secondsAfterRejection = new Number($("#minRej").val());
         var json = {
             "api": api,
             "scenario": jsonObj,
@@ -146,19 +155,17 @@ $(document).ready(function() {
         post(json, '/api/Transformation');
     });
 });
+
 $(document).ready(function () {
     log();
     var  myVar = setInterval(newMes, 2000);
-
-})
-
-
+});
 function log() {
     $.ajax({
         cache: false,
         type: "GET",
         contentType :"application/json",
-        url: '/api/log',
+        url: '/api/LogMes',
         success: function (data) {
             for(var i=0, len=data.length; i<len; i++) {
                 var logV=$("#log").val();
@@ -166,7 +173,7 @@ function log() {
             };
         }
     });
-}
+};
 function newMes() {
     $.ajax({
         cache: false,

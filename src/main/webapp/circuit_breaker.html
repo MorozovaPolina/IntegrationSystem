@@ -32,7 +32,7 @@
             <button type="button" id="addBT" class="addBT" value="+">+</button>
         </div>
     </div>
-        <div class="toReject" id="Rejection" name="Rejection">
+        <div class="toReject" id="Rejection" name="Rejection" class="Rejections">
             <div id="reject1" class="reject" name ="reject">
                 <input type="number" id="messageToRej" name="messageToRej" placeholder="Message to reject" class="messageToRej" min="1">
                 <input type="number" id="RejTime" name="RejTime" placeholder="Number of rejections" class="RejTime" min="1">
@@ -42,12 +42,12 @@
         </div>
     </div>
     <div>
-        <input type="number" id="minRej" name="minRej" class="secondsForProcessing" placeholder="seconds to wait for message after rejection">
+        <input type="number" id="minRej" name="minRej" class="maxSecondsForProcessing" placeholder="seconds to wait for message after rejection">
     </div>
     <div>
         <input type="text" id="api" name = "api" class="api" placeholder="url address"></div>
     <div><button type="button" id="submitCB" class ="submit" onclick="location.href='index.html'">Submit</button>
-    <button type="button" id="cancel" class="submit" onclick="location.href='index.html'">Cancel</button> </div>
+    <button type="button" id="cancel" class="cancel" onclick="location.href='index.html'">Cancel</button> </div>
 </form>
 <div>
     <form action="" method="get">

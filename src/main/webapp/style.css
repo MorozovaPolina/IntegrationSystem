@@ -5,10 +5,12 @@
     border-radius: 50%;
 }
 .Steps{
-     height: 350px;
-     width: 1000px;
+     height: 280px;
+     width: auto;
+     min-width: 800px;
+    max-height: available ;
      overflow: auto;
-     flex-grow: 0;
+    flex-grow: 1;
  }
 .addBT {
     margin: 5px;
@@ -35,18 +37,68 @@
     margin: 5px;
     width: 700px;
     height: 25px;
+    flex-grow:0;
+    position: fixed;
+    bottom: 245px;
+    left: 0px;
+    flex-grow: 0;
 }
 .submit {
     margin: 5px;
     width: 200px;
     height: 25px;
+    position: fixed;
+    left: 0;
+    bottom: 210px;
+    flex-grow: 0;
 }
-.secondsForProcessing{
+.cancel {
+    margin: 5px;
+    width: 200px;
+    height: 25px;
+    position: fixed;
+    left: 250px;
+    bottom: 210px;
+    flex-grow: 0;
+}
+.main {
+    margin: 5px;
+    width: 300px;
+    height:50px;
+    font-size: medium;
+    flex-grow: 1;
+
+}
+.butt{
+    width: 100%;
+
+}
+.maxSecondsForProcessing{
     margin: 5px;
     width: 300px;
     height: 25px;
+    position: fixed;
+    flex-grow: 0;
+    bottom: 280px;
+    left: 0;
+    flex-grow:0;
 }
+.minSecondsForProcessing{
+    margin: 5px;
+    width: 300px;
+    height: 25px;
+    position: fixed;
+    flex-grow: 0;
+    bottom: 280px;
+    left: 310px;
+    flex-grow:0;
+}
+.Rejections{
+    background: aqua;
+    width: auto;
 
+    flex-grow:1;
+}
 .messageToRej{
     margin: 5px;
     width: 30%;
@@ -58,13 +110,16 @@
     height: 25px;
 }
 .log{
-    height: 350px;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    height: 200px;
     width: 100%;
     overflow: auto;
 }
 .toReject{
     height: 350px;
-    flex-grow:1;
+    flex-grow:0;
     overflow: auto;
 }
 .removeR{
@@ -80,6 +135,13 @@
     border-radius: 50%;
 }
 .proc{
+    display: flex;
     height: auto;
-    min-height: 425px;
+    min-height: 350px;
+    align-content: left;
+}
+.mainPage{
+    height: auto;
+    min-height: 350px;
+    align-content: left;
 }
