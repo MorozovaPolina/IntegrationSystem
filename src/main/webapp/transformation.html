@@ -26,7 +26,7 @@
             <option value="SystemC">SystemC</option>
             <option value="SystemD">SystemD</option>
         </select>
-        <input type="number" class="count" id="count" name="count" placeholder="count" min="1"/>
+        <input type="number" class="count" id="count" name="count" placeholder="count" />
         <button type="button" id="removeBT" class="removeBT" value="-">-</button>
         <button type="button" id="addBT" class="addBT" value="+">+</button>
     </div>
@@ -34,7 +34,8 @@
     <div>
         <input type="text" id="api" name = "api" class="api" placeholder="url address"></div>
     <div><button type="button" id="submitTransformation" class ="submit" onclick="location.href='index.html'">Submit</button>
-        <button type="button" id="cancel" class="submit" onclick="location.href='index.html'">Cancel</button> </div>
+        <button type="button" id="cancel" class="cancel" onclick="location.href='index.html'">Cancel</button>
+        <button type="button" id="clear" class="clear" onclick="deleteLog()">Clear Log</button></div>
 </form>
 <div>
     <form action="" method="get">

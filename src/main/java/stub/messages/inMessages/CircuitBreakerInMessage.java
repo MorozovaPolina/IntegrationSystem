@@ -1,7 +1,7 @@
 package stub.messages.inMessages;
 
 public class CircuitBreakerInMessage extends AbstractInMessage {
-    String source;
+   String source;
     String target;
     boolean toBeRejected;
     int numberOfRejections;
@@ -24,7 +24,7 @@ public class CircuitBreakerInMessage extends AbstractInMessage {
     }
 
     public void setSource(String source) {
-        this.source = source;
+       this.source = source;
     }
 
     public String getSource() {

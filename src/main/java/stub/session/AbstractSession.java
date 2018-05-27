@@ -8,8 +8,8 @@ import stub.rest.systems.SystemB;
 import stub.rest.systems.SystemC;
 import stub.rest.systems.SystemD;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
 import static stub.helpers.GlobalValues.SessionNumber;
@@ -17,8 +17,8 @@ import static stub.helpers.GlobalValues.SessionNumber;
 public abstract class AbstractSession {
     int session_id;
     RequirementsTypes Requirement;
-    LocalDateTime start_time;
-    LocalDateTime end_time;
+    Date start_time;
+    Date end_time;
     int expected_message_number;
     int received_message_number;
     ArrayList<Step> Scenario;
@@ -30,7 +30,7 @@ public abstract class AbstractSession {
         this.session_id=SessionNumber;
         SessionNumber++;
         this.Requirement=Requirement;
-        this.start_time=LocalDateTime.now();
+        this.start_time=new Date();
         this.Scenario=new ArrayList<>();
         this.expected_message_number = 0;
         received_message_number=0;
@@ -91,12 +91,12 @@ public abstract class AbstractSession {
     /* всe, вроде, завершилось благополучно*/
     public void closeSession(){
         Status= SessionStatus.SuccessfullyEnded;
-        end_time=LocalDateTime.now();
+        end_time=new Date();
     }
     /* возникла ошибка, из-за которой считается, что шина не покрывает требование*/
     public void markAsFailed(){
         Status= SessionStatus.Failed;
-        end_time=LocalDateTime.now();
+        end_time=new Date();
     }
 
     public void callForSending(String source, String gson, String API) throws ExecutionException, InterruptedException {
@@ -175,19 +175,19 @@ public abstract class AbstractSession {
         this.received_message_number = received_message_number;
     }
 
-    public LocalDateTime getEnd_time() {
+    public Date getEnd_time() {
         return end_time;
     }
 
-    public void setEnd_time(LocalDateTime end_time) {
+    public void setEnd_time(Date end_time) {
         this.end_time = end_time;
     }
 
-    public LocalDateTime getStart_time() {
+    public Date getStart_time() {
         return start_time;
     }
 
-    public void setStart_time(LocalDateTime start_time) {
+    public void setStart_time(Date start_time) {
         this.start_time = start_time;
     }
 }

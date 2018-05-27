@@ -37,4 +37,5 @@ public class QueueInMessage extends AbstractInMessage {
     public void setTarget(String target) {
         this.target = target;
     }
+
 }

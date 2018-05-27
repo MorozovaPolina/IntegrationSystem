@@ -92,17 +92,29 @@ public class RoutingHandler {
        // System.out.println("Hello, log!");
         Gson gson = new Gson();
         String log = gson.toJson(NewMessagesLog);
-       // System.out.println(log);
+        //System.out.println(log);
+        if(Log.size()>10000) Log.clear();
         Log.addAll(NewMessagesLog);
+        //System.out.println(Log.size());
         NewMessagesLog.clear();
         return Response.status(Response.Status.OK).entity(log).build();
     }
 
     @GET
-    @Path("log")
+    @Path("LogMes")
     public Response logHandler(){
         Gson gson = new Gson();
+        System.out.println("you called log");
         String log = gson.toJson(Log);
+       // System.out.println("log "+log);
         return Response.status(Response.Status.OK).entity(log).build();
     }
+
+    @GET
+    @Path("deleteLog")
+    public Response deleteLog(){
+        Log.clear();
+        return Response.status(Response.Status.OK).entity("").build();
+    }
+
 }

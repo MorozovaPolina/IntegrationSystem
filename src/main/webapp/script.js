@@ -124,7 +124,6 @@ $(document).ready(function() {
 
 $(document).ready(function() {
     $("#submitCB").click(function() {
-
         var jsonObj = createSteps($("#Steps"));
         var rejections=createRejection($("#Rejection"));
         //alert("rej done")
@@ -145,12 +144,9 @@ $(document).ready(function() {
     $("#submitTransformation").click(function() {
         var jsonObj = createSteps($("#Steps"));
         var api = $("#form").find(".api").val();
-        alert("Cb1");
-        var secondsAfterRejection = new Number($("#minRej").val());
         var json = {
             "api": api,
-            "scenario": jsonObj,
-            "secondsAfterRejection": secondsAfterRejection
+            "scenario": jsonObj
         };
         post(json, '/api/Transformation');
     });
@@ -189,6 +185,17 @@ function newMes() {
             };
         }
     });
+
+}
+
+function deleteLog() {
+    $("#log").val("");
+    alert('clear');
+    $.ajax({
+        cache: false,
+        type: "GET",
+        contentType :"application/json",
+        url: '/api/deleteLog'});
 
 }
 function getFormData($form){

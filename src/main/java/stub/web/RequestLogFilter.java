@@ -28,6 +28,7 @@ public class RequestLogFilter implements Filter {
 
         }
         catch (Throwable e) {
+            System.out.println("error "+ e.getMessage());
             logger.error("", e);
         }
     }

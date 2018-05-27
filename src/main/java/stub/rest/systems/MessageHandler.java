@@ -1,6 +1,7 @@
 package stub.rest.systems;
 
 import stub.exceptions.*;
+import stub.helpers.DemoHelper;
 import stub.messages.inMessages.*;
 import stub.session.*;
 
@@ -48,7 +49,7 @@ public class MessageHandler {
             session.markAsFailed();
             return alreadyGotTheMes.getMessage();
         }
-       return tryToCloseSession(session);
+       return tryToCloseSession(session, in);
     }
 
     public static String queueProcessMessage(QueueInMessage in, String receiverName){
@@ -103,7 +104,7 @@ public class MessageHandler {
             session.markAsFailed();
             return waitingTimeLack.getMessage();
         }
-        return tryToCloseSession(session);
+        return tryToCloseSession(session, in);
     }
 
     public static String transformationProcessMessage(TransformationInMessage in, String receiverName){
@@ -144,7 +145,7 @@ public class MessageHandler {
             Session.markAsFailed();
             return alreadyGotTheMes.getMessage();
         }
-        return tryToCloseSession(Session);
+        return tryToCloseSession(Session, in);
     }
 
     public static String circuitBreakerProcessMessage(CircuitBreakerInMessage in, String receiverName){
@@ -210,7 +211,7 @@ public class MessageHandler {
             Session.markAsFailed();
             return waitingTimeLack.getMessage();
         }
-        return tryToCloseSession(Session);
+        return tryToCloseSession(Session, in);
     }
 
     public static AbstractSession getSession(int SessionID) throws NoSessionFound, AlreadyFailedSession, AlreadyClosedSession {
@@ -249,12 +250,12 @@ public class MessageHandler {
     }
 
     public static void checkWaitingTimeExceeded(AbstractInMessage in, int secondsToWait, AbstractSession session) throws WaitingTimeExceeded {
-        if(new Date().getTime() - new Date(in.getTime()).getTime()> secondsToWait)
+        if(new Date().getTime() - new Date(in.getTime()).getTime()> secondsToWait*100)
             throw new WaitingTimeExceeded(session.getSession_id(), session.getRequirement().toString());
     }
 
     public static void checkWaitingTimeLack(Date lastMessageReceiver, int secondsToWait, AbstractSession session) throws WaitingTimeLack {
-        if((new Date().getTime() - lastMessageReceiver.getTime())< secondsToWait)
+        if((new Date().getTime() - lastMessageReceiver.getTime())< secondsToWait*1000)
             throw new WaitingTimeLack(session.getSession_id(), session.getRequirement().toString());
     }
 
@@ -274,11 +275,14 @@ public class MessageHandler {
         throw new IncorrectMessageSequence(session.getRequirement().toString());
     }
 
-    public  static String tryToCloseSession(AbstractSession session){
+    public  static String tryToCloseSession(AbstractSession session, AbstractInMessage in){
         if(session.checkIfClose()){
-            return "All messages received. Session "+ session.getSession_id()+" successfully closed. Requirement "+ session.getRequirement();
+            return "All messages received. Session "+ session.getSession_id()+" " + session.getRequirement()
+                    +" testing  started " + DemoHelper.DateTimeFormatter.get().format(session.getStart_time())+" successfully closed. " +
+                    session.getReceived_message_number()+" messages received";
         }
-        return "Message successfully processed";
+        return "Message " + in.getOrder_number()+" in session "+ in.getSession_id()+" "+
+                in.getRequirement()+" testing successfully processed";
 
     }
 

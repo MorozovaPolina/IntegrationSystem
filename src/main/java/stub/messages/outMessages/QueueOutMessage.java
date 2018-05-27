@@ -1,5 +1,9 @@
 package stub.messages.outMessages;
 
+import stub.helpers.DemoHelper;
+
+import java.util.Date;
+
 public class QueueOutMessage extends AbstractOutMessage{
     int maxSuitableMessageProcessingTime;
     int minSuitableMessageProcessingTime;
@@ -28,4 +32,5 @@ public class QueueOutMessage extends AbstractOutMessage{
     public void setMinSuitableMessageProcessingTime(int minSuitableMessageProcessingTime) {
         this.minSuitableMessageProcessingTime = minSuitableMessageProcessingTime;
     }
+
 }

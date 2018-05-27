@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Routing</title>
     <link rel="stylesheet" type="text/css" href="style.css">
     <script src="http://code.jquery.com/jquery-1.4.2.js" type="text/javascript"></script>
     <script type="text/javascript" src="script.js"></script>
 </head>
 <body>
-<h1>Create Steps</h1>
+<h1>Routing testing</h1>
 <form id="form" action="" method="post" class="proc">
     <div id="Steps" name="Steps" class="Steps">
    <div class="step" id="step1" name="step">
@@ -26,7 +26,7 @@
             <option value="SystemC">SystemC</option>
             <option value="SystemD">SystemD</option>
         </select>
-        <input type="number" class="count" id="count" name="count" placeholder="count" min="1"/>
+        <input type="number" class="count" id="count" name="count" placeholder="count" />
         <button type="button" id="removeBT" class="removeBT" value="-">-</button>
         <button type="button" id="addBT" class="addBT" value="+">+</button>
     </div>
@@ -34,7 +34,9 @@
     <div>
         <input type="text" id="api" name = "api" class="api" placeholder="url address"></div>
     <div><button type="button" id="submitRouting" class ="submit" onclick="location.href='index.html'">Submit</button>
-        <button type="button" id="cancel" class="cancel" onclick="location.href='index.html'">Cancel</button> </div>
+        <button type="button" id="cancel" class="cancel" onclick="location.href='index.html'">Cancel</button>
+        <button type="button" id="clear" class="clear" onclick="deleteLog()">Clear Log</button></div>
+
 </form>
 <div>
     <form action="" method="get">

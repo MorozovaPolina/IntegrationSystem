@@ -1,16 +1,16 @@
 package stub.messages.inMessages;
 
 public class RoutingInMessage extends AbstractInMessage {
-    String source;
+    //String source;
     String target;
 
-    public String getSource() {
+   /*public String getSource() {
         return source;
     }
 
     public void setSource(String source) {
         this.source = source;
-    }
+    }*/
 
     public String getTarget() {
         return target;
